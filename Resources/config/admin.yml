@@ -1,0 +1,8 @@
+services:
+    glavweb_subscription.admin.subscription:
+        class: Glavweb\SubscriptionBundle\Admin\SubscriptionAdmin
+        arguments: [~, Glavweb\SubscriptionBundle\Entity\Subscription, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: label_subscription, label_translator_strategy: "sonata.admin.label.strategy.underscore"}
+        calls:
+            - [ setTranslationDomain, ["messages"]]

@@ -1,0 +1,48 @@
+filter:
+    label_email:      E-mail
+    label_ip:         IP
+    label_context:    Контекст
+    label_created_at: Дата создания
+    label__action:    Действие
+
+list:
+    label_email:      E-mail
+    label_ip:         IP
+    label_context:    Контекст
+    label_created_at: Дата создания
+    label__action:    Действие
+
+form:
+    label_email:      E-mail
+    label_ip:         IP
+    label_context:    Контекст
+    label_created_at: Дата создания
+    label__action:    Действие
+
+show:
+    label_email:      E-mail
+    label_ip:         IP
+    label_context:    Контекст
+    label_created_at: Дата создания
+    label__action:    Действие
+
+breadcrumb:
+    link_subscription_list: Список подписок
+
+label_subscription: Подписки
+
+mailing:
+    head: Рассылка
+    mailing: Рассылка
+    entity: Объект
+    count_recipients: Получателей
+    loading: Загрузка ...
+    history: История
+    date: Дата
+    username: Пользователь
+    history_not_found: История не найдена
+    send_mailing: Разослать
+
+flash:
+    send_mailing_success: Сообщения упешно разосланы
+    send_mailing_failure: Произвести рассылку не удалось

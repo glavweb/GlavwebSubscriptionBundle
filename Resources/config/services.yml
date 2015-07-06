@@ -1,0 +1,4 @@
+services:
+    glavweb_subscription.handler.subscriber_handler:
+        class: Glavweb\SubscriptionBundle\Handler\SubscriberHandler
+        arguments: [ %glavweb_subscription.contexts%, @swiftmailer.mailer, @templating, @doctrine, @translator, @security.context ]

@@ -1,0 +1,120 @@
+{% extends base_template %}
+
+{% block breadcrumb %}
+    <li>
+        <a href="{{ url('sonata_admin_dashboard') }}">⌂</a>
+    </li>
+    <li class="active">{% trans %}mailing.head{% endtrans %}</li>
+{% endblock %}
+
+{% block title %}{% trans %}mailing.head{% endtrans %}{% endblock %}
+
+{% block navbar_title %}
+    {% trans %}mailing.head{% endtrans %}
+{% endblock %}
+
+{% block tab_menu %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(function(){
+            $('form[name="trello_import"]').submit(function () {
+                var btn = $(this).find('.btn-success');
+                btn.button('loading')
+            });
+
+            $('.loading-state').click(function () {
+                var btn = $(this);
+                btn.button('loading')
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="box box-success">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                {% trans %}mailing.mailing{% endtrans %}
+                            </h4>
+                        </div>
+                        <div class="box-body">
+                            <div class="sonata-ba-collapsed-fields">
+                                <table class="table table-bordered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td>{% trans %}mailing.entity{% endtrans %}:</td>
+                                            <td>{{ entityTitle|trans }} "{{ entity }}"</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{% trans %}mailing.count_recipients{% endtrans %}:</td>
+                                            <td>{{ countRecipients }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <form name="application_import" method="post" action="{{ path('glavweb_subscription_send_mailing') }}" class="form-inline" role="form" enctype="multipart/form-data" style="margin-top: 10px">
+                                    <input type="hidden" name="context" value="{{ context }}" />
+                                    <input type="hidden" name="entity_id" value="{{ entity.id }}" />
+                                    <input type="submit" class="btn btn-success" value="{% trans %}mailing.send_mailing{% endtrans %}" data-loading-text="{% trans %}mailing.loading{% endtrans %}" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="box box-success">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                {% trans %}mailing.history{% endtrans %}
+                            </h4>
+                        </div>
+                        <div class="box-body">
+                            {% if subscriptionHistory is not empty %}
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>{% trans %}mailing.date{% endtrans %}</th>
+                                        <th>{% trans %}mailing.username{% endtrans %}</th>
+                                        <th>{% trans %}mailing.count_recipients{% endtrans %}</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% for historyItem in subscriptionHistory %}
+                                        <tr>
+                                            <td>{{ historyItem.createdAt|date('d.m.Y H:i') }}</td>
+                                            <td>{{ historyItem.username }}</td>
+                                            <td>{{ historyItem.countEmails }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+                            {% else %}
+                                {% trans %}mailing.history_not_found{% endtrans %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

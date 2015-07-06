@@ -1,0 +1,3 @@
+glavweb_subscription_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: GlavwebSubscriptionBundle:Default:index }
