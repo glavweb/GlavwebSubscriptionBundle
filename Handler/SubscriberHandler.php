@@ -5,10 +5,10 @@ namespace Glavweb\SubscriptionBundle\Handler;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Glavweb\SubscriptionBundle\Entity\SubscriptionHistory;
 use Glavweb\SubscriptionBundle\Entity\SubscriptionHistoryEmail;
-use Symfony\Bundle\TwigBundle\Debug\TimedTwigEngine;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\LoggingTranslator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class SubscriberHandler
@@ -27,7 +27,7 @@ class SubscriberHandler
     private $mailer;
 
     /**
-     * @var
+     * @var TwigEngine
      */
     private $templating;
 
@@ -42,25 +42,26 @@ class SubscriberHandler
     private $translator;
 
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface
      */
-    private $securityContext;
+    private $tokenStorage;
 
     /**
      * @param array $contextsConfig
      * @param \Swift_Mailer $mailer
-     * @param TimedTwigEngine $templating
+     * @param TwigEngine $templating
      * @param Registry $doctrine
-     * @param LoggingTranslator $translator
+     * @param LoggingTranslator|TranslatorInterface $translator
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(array $contextsConfig = array(), \Swift_Mailer $mailer, TimedTwigEngine $templating, Registry $doctrine, LoggingTranslator $translator, SecurityContextInterface $securityContext)
+    public function __construct(array $contextsConfig = array(), \Swift_Mailer $mailer, TwigEngine $templating, Registry $doctrine, TranslatorInterface $translator, TokenStorageInterface $tokenStorage)
     {
         $this->contextsConfig  = $contextsConfig;
         $this->mailer          = $mailer;
         $this->templating      = $templating;
         $this->doctrine        = $doctrine;
         $this->translator      = $translator;
-        $this->securityContext = $securityContext;
+        $this->tokenStorage    = $tokenStorage;
     }
 
     /**
@@ -110,10 +111,12 @@ class SubscriberHandler
     {
         $em = $this->doctrine->getManager();
 
+        $user = $this->tokenStorage->getToken()->getUser();
+
         $history = new SubscriptionHistory();
         $history->setContext($context);
         $history->setEntityId($entity->getId());
-        $history->setUsername($this->securityContext->getToken()->getUsername());
+        $history->setUsername($user->getUsername());
         $history->setCountEmails(count($emails));
         $em->persist($history);
 
